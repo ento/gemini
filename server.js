@@ -16,16 +16,16 @@ const createGeminiServer = (opt = {}, onRequest) => {
 	}
 	const {
 		cert, key, passphrase,
-		tlsOpt,
+		tlsOpt, verifyAlpn,
 	} = {
 		cert: null, key: null, passphrase: null,
-		tlsOpt: {},
+		tlsOpt: {}, verifyAlpn: true,
 		...opt,
 	}
 
 	const onConnection = (socket) => {
 		// todo: clarify if this is desired behavior
-		if (socket.alpnProtocol !== ALPN_ID) {
+		if (verifyAlpn && socket.alpnProtocol !== ALPN_ID) {
 			socket.destroy()
 			return;
 		}
